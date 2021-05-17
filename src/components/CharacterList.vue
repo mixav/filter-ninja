@@ -128,6 +128,9 @@ export default {
       }
       return true;
     }
+  // },
+  // beforeCreate() {
+  //   this.ninjaList = this.firebase.database().ref('/ninjas').once();
   }
 }
 </script>
