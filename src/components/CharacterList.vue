@@ -92,12 +92,28 @@ export default {
         width: 56,
         height: 56
       },
-      characterTags: {
-        talent: ['increaseHP', 'reduceAIR', 'increaseATK', 'increaseAR', 'increaseHIT', 'ignoreATK', 'ignoreReflect'],
-        skill: ['dot', 'increaseATK', 'increasePunch', 'increaseDEF', 'reduceHeal'],
-        immunity: ['windBound', 'deathSeed'],
-        control: ['windBound']
-      },
+      characterTags: [
+        {
+          text: 'Талант',
+          label: 'talent',
+          value: ['increaseHP', 'reduceAIR', 'increaseATK', 'increaseAR', 'increaseHIT', 'ignoreATK', 'ignoreReflect']
+        },
+        {
+          text: 'Навык',
+          label: 'skill',
+          value: ['dot', 'increaseATK', 'increasePunch', 'increaseDEF', 'reduceHeal']
+        },
+        {
+          text: 'Иммунитет',
+          label: 'immunity',
+          value: ['windBound', 'deathSeed']
+        },
+        {
+          text: 'Контроль',
+          label: 'crowd-control',
+          value: ['windBound']
+        }
+      ],
       selected: {}
     }
   },
@@ -114,7 +130,7 @@ export default {
         tmpList = tmpList.filter(function (character) {
           for (const [key, value] of Object.entries(selected)) {
             for (const tag of value) {
-              if (character.tags[key].indexOf(tag) < 0)
+              if (!character.tags[key] || character.tags[key].indexOf(tag) < 0)
                 return false;
             }
           }
@@ -140,6 +156,9 @@ export default {
   },
   mounted() {
     ninjasRef.on("value", this.onDataChange);
+  },
+  beforeDestroy() {
+    ninjasRef.off("value", this.onDataChange);
   }
 }
 </script>

@@ -1,12 +1,12 @@
 <template>
   <b-container fluid="true">
-    <b-form-group v-for="(list, kind) in tags" :label="kind" :key="kind">
+    <b-form-group v-for="list in tags" :label="list.text" :key="list.label">
       <b-form-checkbox-group
-          :id="kind + '-group'"
-          v-model="selected[kind]"
-          :options="list"
+          :id="list.label + '-group'"
+          v-model="selected[list.label]"
+          :options="list.value"
           stacked
-          :name="kind">
+          :name="list.label">
       </b-form-checkbox-group>
     </b-form-group>
   </b-container>
@@ -16,7 +16,7 @@
 export default {
   name: "TagFilter",
   props: {
-    tags: Object,
+    tags: Array,
     selected: Object
   }
 }

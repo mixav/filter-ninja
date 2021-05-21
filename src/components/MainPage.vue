@@ -4,6 +4,7 @@
         <b-tab v-for="category in categoryList" :key="category.id" :title="category.title" >
           <p>
             <CharacterList v-if="category.name === 'CharacterList'"></CharacterList>
+            <DataEditor v-if="category.name === 'DataEditor'"></DataEditor>
           </p>
         </b-tab>
     </b-tabs>
@@ -12,10 +13,11 @@
 
 <script>
 import CharacterList from "@/components/CharacterList";
+import DataEditor from "@/components/DataEditor";
 
 export default {
   name: 'MainPage',
-  components: {CharacterList},
+  components: {DataEditor, CharacterList},
   data() {
     return {
       categoryList: [
@@ -33,6 +35,11 @@ export default {
           title: 'Бижутерия',
           name: 'AccessoriesList',
           id: '3'
+        },
+        {
+          title: 'Редактор',
+          name: 'DataEditor',
+          id: '4'
         }
       ]
     }
