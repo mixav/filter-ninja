@@ -1,7 +1,9 @@
 <template>
-  <div id="v-model-select">
-    <b-form-select @change="onSelectChange" v-model="selected" :options="options"/>
-  </div>
+  <b-card no-body>
+    <b-tabs pills card vertical @change="onSelectChange">
+      <b-tab v-for="option in options" :key=option.value :title="option.text"/>
+    </b-tabs>
+  </b-card>
 </template>
 
 <script>

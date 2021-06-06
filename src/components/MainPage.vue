@@ -1,13 +1,21 @@
 <template>
   <b-container fluid="true">
-    <b-tabs>
-        <b-tab v-for="category in categoryList" :key="category.id" :title="category.title" >
-          <p>
-            <CharacterList v-if="category.name === 'CharacterList'"></CharacterList>
-            <DataEditor v-if="category.name === 'DataEditor'"></DataEditor>
-          </p>
-        </b-tab>
-    </b-tabs>
+    <b-nav>
+      <b-nav-item v-for="category in categoryList" :key="category.id"
+                  @changed="atTabChange(category.name)"
+      >
+        {{ category.title }}
+      </b-nav-item>
+      <b-nav-item-dropdown id="drop-1" :text="editor.title">
+        <b-dropdown-item v-for="option in editor.options" :text="option.text" :key="option.value">
+          {{ option.text }}
+        </b-dropdown-item>
+      </b-nav-item-dropdown>
+    </b-nav>
+    <p>
+      <CharacterList disabled="true">'CharacterList'"></CharacterList>
+      <DataEditor hidden> 'DataEditor'"></DataEditor>
+    </p>
   </b-container>
 </template>
 
@@ -36,12 +44,32 @@ export default {
           name: 'AccessoriesList',
           id: '3'
         },
-        {
-          title: 'Редактор',
-          name: 'DataEditor',
-          id: '4'
-        }
-      ]
+
+      ],
+      editor: {
+        title: 'Редактор',
+        name: 'DataEditor',
+        id: '4',
+        options: [
+          {
+            text: 'Персонажи',
+            value: 'Ninjas'
+          },
+          {
+            text: 'Экипировка',
+            value: 'Equip'
+          },
+          {
+            text: 'Бижутерия',
+            value: 'Accessories'
+          }
+        ]
+      },
+    }
+  },
+  methods: {
+    atTabChange(event) {
+      console.log(event);
     }
   }
 }

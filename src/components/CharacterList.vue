@@ -118,7 +118,7 @@ export default {
     }
   },
   methods: {
-    filterCharacters: function (charName, selected) {
+    filterCharacters(charName, selected) {
       let tmpList = this.ninjaList;
       if (charName.length !== 0) {
         tmpList = tmpList.filter(function (character) {
@@ -139,14 +139,14 @@ export default {
       }
       return tmpList
     },
-    isFilterEmpty: function (selected) {
+    isFilterEmpty(selected) {
       for (const [, value] of Object.entries(selected)) {
         if (value != null && value.length !== 0)
           return false;
       }
       return true;
     },
-    onDataChange: function (snapshot) {
+    onDataChange(snapshot) {
       if (snapshot.exists()) {
         this.ninjaList = snapshot.val();
       } else {
