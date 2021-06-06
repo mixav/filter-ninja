@@ -1,31 +1,29 @@
 <template>
   <b-container fluid="true">
     <b-nav>
-      <b-nav-item v-for="category in categoryList" :key="category.id"
-                  @changed="atTabChange(category.name)"
+      <b-nav-item v-for="category in categoryList"
+                  :key="category.id"
+                  :to="'/'+category.name"
       >
         {{ category.title }}
       </b-nav-item>
       <b-nav-item-dropdown id="drop-1" :text="editor.title">
-        <b-dropdown-item v-for="option in editor.options" :text="option.text" :key="option.value">
+        <b-dropdown-item v-for="option in editor.options"
+                         :text="option.text"
+                         :key="option.value"
+                         :to="'/'+editor.name+'/'+option.value">
           {{ option.text }}
         </b-dropdown-item>
       </b-nav-item-dropdown>
     </b-nav>
-    <p>
-      <CharacterList disabled="true">'CharacterList'"></CharacterList>
-      <DataEditor hidden> 'DataEditor'"></DataEditor>
-    </p>
   </b-container>
 </template>
 
 <script>
-import CharacterList from "@/components/CharacterList";
-import DataEditor from "@/components/DataEditor";
 
 export default {
   name: 'MainPage',
-  components: {DataEditor, CharacterList},
+  components: {},
   data() {
     return {
       categoryList: [
@@ -65,11 +63,6 @@ export default {
           }
         ]
       },
-    }
-  },
-  methods: {
-    atTabChange(event) {
-      console.log(event);
     }
   }
 }

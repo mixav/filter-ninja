@@ -2,8 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import firebase from "firebase/app";
+
 // import "firebase/analytics";
 import "firebase/database"
+
+import router from './router'
 
 const firebaseConfig = {
     apiKey: "AIzaSyDJ6op13XjY_1UpIo7WYBnagztBHDkxP8k",
@@ -29,5 +32,6 @@ export {
     ninjasRef
 }
 new Vue({
-    render: h => h(App),
+    router,
+    render: h => h(App)
 }).$mount('#app')
