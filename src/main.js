@@ -7,6 +7,7 @@ import firebase from "firebase/app";
 import "firebase/database"
 
 import router from './router'
+import store from './store'
 
 const firebaseConfig = {
     apiKey: "AIzaSyDJ6op13XjY_1UpIo7WYBnagztBHDkxP8k",
@@ -33,5 +34,6 @@ export {
 }
 new Vue({
     router,
+    store,
     render: h => h(App)
 }).$mount('#app')
