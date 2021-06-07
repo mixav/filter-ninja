@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import CharacterList from '@/components/CharacterList'
 import DataEditor from '@/components/DataEditor'
+import DictionaryEditor from '@/components/DictionaryEditor'
 
 Vue.use(VueRouter)
 
@@ -13,10 +14,15 @@ const routes = [
         component: CharacterList
     },
     {
-        path: '/DataEditor/*',
-        alias: '/DataEditor/*',
+        path: '/DataEditor/Dictionaries',
+        name: 'DictionaryEditor',
+        component: DictionaryEditor
+    },
+    {
+        path: '/DataEditor/:type',
         name: 'DataEditor',
-        component: DataEditor
+        component: DataEditor,
+        props: true
     }
 ]
 

@@ -60,6 +60,10 @@ export default {
           {
             text: 'Бижутерия',
             value: 'Accessories'
+          },
+          {
+            text: 'Словари',
+            value: 'Dictionaries'
           }
         ]
       },
