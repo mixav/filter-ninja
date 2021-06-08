@@ -1,42 +1,43 @@
 <template>
-  <div>
-    <div v-for="dictionary in tagsDictionaries" :key="dictionary.label">
-      <div class="row">
-        <b class="ml-2 col-sm-2">{{ dictionary.text }}:</b>
-        <b-form-tags class="col-sm-9" :value="dictionary.value" :placeholder="dictionary.text"/>
-      </div>
-      <br>
-    </div>
-  </div>
+  <b-tabs>
+    <b-tab v-for="tagType in allTags"
+           :key="tagType.label"
+           :title="tagType.text">
+      <b-form class="col-md-4">
+        <b-tag v-for="tagValue in tagType.options"
+               :title="tagValue.value"
+               :key="tagValue.id"
+               @remove="removeTag(tagType.id,tagValue.id)"/>
+        <b-input-group class="mt-4">
+          <b-input-group-prepend>
+            <b-button variant="outline-secondary" @click="addNewTag(tagType.id)">Add</b-button>
+          </b-input-group-prepend>
+          <b-form-input v-model="newTag"
+                        placeholder="Type new tag here"/>
+        </b-input-group>
+      </b-form>
+    </b-tab>
+  </b-tabs>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+
 export default {
   name: "DictionaryEditor",
   data() {
     return {
-      tagsDictionaries: [
-        {
-          text: 'Талант',
-          label: 'talent',
-          value: ['increaseHP', 'reduceAIR', 'increaseATK', 'increaseAR', 'increaseHIT', 'ignoreATK', 'ignoreReflect']
-        },
-        {
-          text: 'Навык',
-          label: 'skill',
-          value: ['dot', 'increaseATK', 'increasePunch', 'increaseDEF', 'reduceHeal']
-        },
-        {
-          text: 'Иммунитет',
-          label: 'immunity',
-          value: ['windBound', 'deathSeed']
-        },
-        {
-          text: 'Контроль',
-          label: 'crowd-control',
-          value: ['windBound']
-        }
-      ]
+      newTag: ''
+    }
+  },
+  computed: mapState({allTags: state => state.tagList}),
+  methods: {
+    removeTag(type, value) {
+      this.$store.dispatch('removeTag', {familyId: type, docId: value})
+    },
+    addNewTag(familyId) {
+      this.$store.dispatch('addTag', {familyId, value: this.newTag})
+      this.newTag = '';
     }
   }
 }

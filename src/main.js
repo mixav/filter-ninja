@@ -4,7 +4,7 @@ import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import firebase from "firebase/app";
 
 // import "firebase/analytics";
-import "firebase/database"
+import "firebase/firestore"
 
 import router from './router'
 import store from './store'
@@ -21,8 +21,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+const fb = firebase.firestore()
 // firebase.analytics();
-const ninjasRef = firebase.database().ref('ninjas');
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
@@ -30,7 +30,7 @@ Vue.use(IconsPlugin)
 Vue.use(firebase)
 
 export {
-    ninjasRef
+    fb
 }
 new Vue({
     router,

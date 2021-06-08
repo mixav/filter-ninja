@@ -4,9 +4,11 @@
       <b-form-checkbox-group
           :id="list.label + '-group'"
           v-model="selected[list.label]"
-          :options="list.value"
           stacked
           :name="list.label">
+        <b-form-checkbox v-for="tag in list.options" :key="tag.id">
+          {{ tag.value }}
+        </b-form-checkbox>
       </b-form-checkbox-group>
     </b-form-group>
   </b-container>

@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <TagFilter class="col-2" :tags="characterTags" :selected="selected"/>
+    <TagFilter class="col-2" :tags="filterTags" :selected="selected"/>
     <b-col cols="8">
       <b-col cols="4" class="ml-auto p-0">
         <b-input-group>
@@ -49,7 +49,7 @@
 
 <script>
 import TagFilter from "@/components/TagFilter";
-import {ninjasRef} from "@/main";
+import {mapState} from 'vuex'
 
 export default {
   name: "CharacterList",
@@ -86,37 +86,20 @@ export default {
       //     }
       //   }
       // ],
-      ninjaList: [],
       charName: '',
       imgProps: {
         width: 56,
         height: 56
       },
-      characterTags: [
-        {
-          text: 'Талант',
-          label: 'talent',
-          value: ['increaseHP', 'reduceAIR', 'increaseATK', 'increaseAR', 'increaseHIT', 'ignoreATK', 'ignoreReflect']
-        },
-        {
-          text: 'Навык',
-          label: 'skill',
-          value: ['dot', 'increaseATK', 'increasePunch', 'increaseDEF', 'reduceHeal']
-        },
-        {
-          text: 'Иммунитет',
-          label: 'immunity',
-          value: ['windBound', 'deathSeed']
-        },
-        {
-          text: 'Контроль',
-          label: 'crowd-control',
-          value: ['windBound']
-        }
-      ],
       selected: {}
     }
   },
+  computed:
+      mapState({
+        filterTags: 'tagList',
+        ninjaList: 'characterList'
+      })
+  ,
   methods: {
     filterCharacters(charName, selected) {
       let tmpList = this.ninjaList;
@@ -145,20 +128,12 @@ export default {
           return false;
       }
       return true;
-    },
-    onDataChange(snapshot) {
-      if (snapshot.exists()) {
-        this.ninjaList = snapshot.val();
-      } else {
-        console.log("No data available");
-      }
     }
   },
   mounted() {
-    ninjasRef.on("value", this.onDataChange);
-  },
-  beforeDestroy() {
-    ninjasRef.off("value", this.onDataChange);
+    this.$store.dispatch('subscribeToTagCollection')
+    this.$store.dispatch('subscribeToCollection', 'characterList')
+    //TODO disconnect for collection
   }
 }
 </script>
