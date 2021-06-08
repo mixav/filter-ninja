@@ -113,7 +113,7 @@ export default {
         tmpList = tmpList.filter(function (character) {
           for (const [key, value] of Object.entries(selected)) {
             for (const tag of value) {
-              if (!character.tags[key] || character.tags[key].indexOf(tag) < 0)
+              if (!character.tags || !character.tags[key] || character.tags[key].indexOf(tag) < 0)
                 return false;
             }
           }
