@@ -77,7 +77,7 @@ export default new Vuex.Store({
     },
     actions: {
         subscribeToTagCollection({commit}) {
-            fb.collection('tagList').get().then((allDocs) => {
+            fb.collection('tagList').orderBy('priority', 'asc').get().then((allDocs) => {
                 let tempTagList = {};
                 allDocs.docs.map(family => (tempTagList[family.id] = {...family.data()}))
                 for (const id in tempTagList) {
@@ -104,7 +104,6 @@ export default new Vuex.Store({
             });
         },
         removeTag({commit}, {familyId, docId}) {
-            //firebase delete
             fb.collection('tagList')
                 .doc(familyId)
                 .collection('options')
