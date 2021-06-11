@@ -12,29 +12,38 @@
               <div class="col-xs-6 col-md-6">
                 <b-form-textarea placeholder="Talent"/>
               </div>
-              <div class="col-xs-6 col-md-6">
-                <b-form-tags placeholder="Talent tags"/>
-              </div>
+              <tag-manipulator class="col-xs-6 col-md-6" :type="TAG.TALENT"
+                               :selected="selectedTags[TAG.TALENT]"
+                               :available="availableOptions(TAG.TALENT,selectedTags[TAG.TALENT])"
+                               v-on:addTagToDescription="addTagToDescription"
+                               v-on:removeSelectedOption="removeSelectedOption"/>
             </div>
 
             <div class="form-group row">
               <div class="col-xs-6 col-md-6">
-                <b-form-textarea placeholder="Passive"/>
+                <b-form-textarea placeholder="Skill"/>
               </div>
-              <div class="col-xs-6 col-md-6">
-                <b-form-tags list="my-list" placeholder="Passive tags"/>
-              </div>
+              <tag-manipulator class="col-xs-6 col-md-6" :type="TAG.SKILL"
+                               :selected="selectedTags[TAG.SKILL]"
+                               :available="availableOptions(TAG.SKILL,selectedTags[TAG.SKILL])"
+                               v-on:addTagToDescription="addTagToDescription"
+                               v-on:removeSelectedOption="removeSelectedOption"/>
             </div>
-
-            <b-form-tags class="col-xs-6 col-md-6 mb-2" placeholder="Crowd Control tags"/>
-            <b-form-tags class="col-xs-6 col-md-6 mb-2" placeholder="Immunities tags"/>
-
-
-            <b-radio-group>
-              <b-radio>Vang</b-radio>
-              <b-radio>Assa</b-radio>
-              <b-radio>Supp</b-radio>
-            </b-radio-group>
+            <tag-manipulator :type="TAG.CROWD_CONTROL"
+                             :selected="selectedTags[TAG.CROWD_CONTROL]"
+                             :available="availableOptions(TAG.CROWD_CONTROL,selectedTags[TAG.CROWD_CONTROL])"
+                             v-on:addTagToDescription="addTagToDescription"
+                             v-on:removeSelectedOption="removeSelectedOption"/>
+            <tag-manipulator class="mt-2" :type="TAG.IMMUNITY"
+                             :selected="selectedTags[TAG.IMMUNITY]"
+                             :available="availableOptions(TAG.IMMUNITY,selectedTags[TAG.IMMUNITY])"
+                             v-on:addTagToDescription="addTagToDescription"
+                             v-on:removeSelectedOption="removeSelectedOption"/>
+            <b-radio-group :options="ninjaType"
+                           v-model="selectedNinjaType"
+                           value-field="value"
+                           text-field="text"
+                           class="my-3"/>
             <b-button type="submit" variant="primary">Submit</b-button>
             <b-button type="reset" variant="danger">Reset</b-button>
           </b-form>
@@ -45,8 +54,14 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+import TagManipulator from "@/components/TagManipulator";
+import {TAG} from '@/constantHelper'
+
+
 export default {
   name: "DataEditor",
+  components: {TagManipulator},
   data() {
     return {
       options: [
@@ -54,16 +69,42 @@ export default {
         {value: 'remove', text: 'Удалить'},
         {value: 'edit', text: 'Редактировать'},
       ],
-      tagDictionary: ['+dot', '+air', '+dr', '+hp'],
       search: '',
-      value: []
+      value: [],
+      selectedTags: {
+        'talent': [],
+        'skill': [],
+        'crowd-control': [],
+        'immunity': []
+      },
+      ninjaType: [
+        {text: 'Авангард', value: 'vanguard'},
+        {text: 'Штурмовик', value: 'assaulter'},
+        {text: 'Помощник', value: 'support'}
+      ],
+      selectedNinjaType: 'vanguard'
     }
   },
   props: {
     type: String
   },
-  methods: {},
-  computed: {}
+  methods: {
+    addTagToDescription: function (type, value) {
+      this.selectedTags[type].push(value);
+    },
+    removeSelectedOption: function (type, value) {
+      this.selectedTags[type] = this.selectedTags[type].filter((tag) => tag !== value)
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'getOptionsByName',
+      'availableOptions'
+    ])
+  },
+  created() {
+    this.TAG = TAG;
+  }
 }
 </script>
 

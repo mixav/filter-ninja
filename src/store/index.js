@@ -1,50 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {fb} from '@/main'
+import {fb} from '@/firebaseconfig'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        tagsDictionaries: [
-            {
-                text: 'Фильтр талантов',
-                label: 'talent',
-                options: [
-                    {'id': 1, 'value': '+HP'},
-                    {'id': 2, 'value': '-AIR'},
-                    {'id': 3, 'value': '+ATK'},
-                    {'id': 4, 'value': '+DR'},
-                    {'id': 5, 'value': '+HIT'},
-                    {'id': 6, 'value': 'ignoreATK'},
-                    {'id': 7, 'value': 'ignoreReflect'}
-                ]
-            },
-            {
-                text: 'Фильтр  навыка',
-                label: 'skill',
-                options: [
-                    {'id': 1, 'value': 'dot'},
-                    {'id': 2, 'value': 'increaseATK'},
-                    {'id': 3, 'value': 'increasePunch'},
-                    {'id': 4, 'value': 'increaseDEF'},
-                    {'id': 5, 'value': 'reduceHeal'}
-                ]
-            },
-            {
-                text: 'Иммунитет',
-                label: 'immunity',
-                options: [
-                    {'id': '1', 'value': 'windBound'},
-                    {'id': '2', 'value': 'deathSeed'}
-                ]
-            },
-            {
-                text: 'Контроль',
-                label: 'crowd-control',
-                options: [{'id': '1', 'value': 'windBound'}]
-            }
-        ],
         characterList: [],
         tagList: []
     },
@@ -54,10 +15,9 @@ export default new Vuex.Store({
             familyTag.options.splice(familyTag.options.findIndex(option => option.id === docId), 1);
         },
         addTag(state, {familyId, ...value}) {
-            console.log({familyId, value});
             let optionsTag = state.tagList.find(tag => tag.id === familyId).options;
             if (optionsTag.findIndex(option => option.id === value.id) === -1)
-                optionsTag.push(value);
+                optionsTag = [...optionsTag, value];
         },
         tagList(state, tempTagList) {
             state.tagList = tempTagList;
@@ -129,5 +89,14 @@ export default new Vuex.Store({
         }
     },
     modules: {},
-    getters: {}
+    getters: {
+        getOptionsByName: (state) => (familyName) => {
+            if (state.tagList.find((family) => family.label === familyName))
+                return state.tagList.find((family) => family.label === familyName).options
+            return []
+        },
+        availableOptions: (state, getters) => (familyName, selectedOptions) => {
+            return getters.getOptionsByName(familyName).filter((option) => selectedOptions.indexOf(option.value) === -1);
+        }
+    }
 })

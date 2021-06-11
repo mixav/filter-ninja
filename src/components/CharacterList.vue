@@ -129,11 +129,6 @@ export default {
       }
       return true;
     }
-  },
-  mounted() {
-    this.$store.dispatch('subscribeToTagCollection')
-    this.$store.dispatch('subscribeToCollection', 'characterList')
-    //TODO disconnect for collection
   }
 }
 </script>

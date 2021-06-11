@@ -68,6 +68,10 @@ export default {
         ]
       },
     }
+  },
+  mounted() {
+    this.$store.dispatch('subscribeToCollection', 'characterList')
+    this.$store.dispatch('subscribeToTagCollection')
   }
 }
 </script>
