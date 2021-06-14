@@ -30,7 +30,7 @@ export default {
       newTag: ''
     }
   },
-  computed: mapState({allTags: state => state.tagList}),
+  computed: mapState({allTags: 'tagList'}),
   methods: {
     removeTag(type, value) {
       this.$store.dispatch('removeTag', {familyId: type, docId: value})

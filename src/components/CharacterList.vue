@@ -4,7 +4,7 @@
     <b-col cols="8">
       <b-col cols="4" class="ml-auto p-0">
         <b-input-group>
-          <b-form-input v-model="charName"></b-form-input>
+          <b-form-input v-model="filterInput"></b-form-input>
           <b-input-group-append>
             <b-input-group-text>
               <b-icon icon="search"/>
@@ -13,7 +13,7 @@
         </b-input-group>
       </b-col>
       <b-list-group>
-        <b-list-group-item v-for="ninja in filterCharacters(charName,selected)" :key="ninja.id">
+        <b-list-group-item v-for="ninja in filteredByTagAndName" :key="ninja.id">
           <div class="row p-1">
             <strong>{{ ninja.name }}</strong>
             <div class="ml-auto">{{ ninja.type }}</div>
@@ -86,7 +86,7 @@ export default {
       //     }
       //   }
       // ],
-      charName: '',
+      filterInput: '',
       imgProps: {
         width: 56,
         height: 56
@@ -94,41 +94,36 @@ export default {
       selected: {}
     }
   },
-  computed:
-      mapState({
-        filterTags: 'tagList',
-        ninjaList: 'characterList'
+  computed: {
+    filteredByNameCharacters() {
+      return this.ninjaList.filter((character) => {
+        return character.name.toLowerCase().includes(this.filterInput.toLowerCase())
       })
-  ,
-  methods: {
-    filterCharacters(charName, selected) {
-      let tmpList = this.ninjaList;
-      if (charName.length !== 0) {
-        tmpList = tmpList.filter(function (character) {
-              return character.name.toLowerCase().indexOf(charName.toLowerCase()) !== -1
-            }
-        )
-      }
-      if (!this.isFilterEmpty(selected)) {
-        tmpList = tmpList.filter(function (character) {
-          for (const [key, value] of Object.entries(selected)) {
+    },
+    filteredByTagAndName() {
+      if (this.isTagFilterUsed) {
+        return this.filteredByNameCharacters.filter((character) => {
+          for (const [key, value] of Object.entries(this.selected)) {
             for (const tag of value) {
-              if (!character.tags || !character.tags[key] || character.tags[key].indexOf(tag) < 0)
+              if (!character.tags || !character.tags[key] || character.tags[key].indexOf(tag) === -1)
                 return false;
             }
           }
           return true;
         })
       }
-      return tmpList
+      return this.filteredByNameCharacters;
     },
-    isFilterEmpty(selected) {
-      for (const [, value] of Object.entries(selected)) {
-        if (value != null && value.length !== 0)
-          return false;
+    isTagFilterUsed() {
+      for (const [, value] of Object.entries(this.selected)) {
+        if (value?.length > 0)
+          return true;
       }
-      return true;
-    }
+      return false;
+    }, ...mapState({
+      filterTags: 'tagList',
+      ninjaList: 'characterList'
+    })
   }
 }
 </script>
