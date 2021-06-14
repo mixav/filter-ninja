@@ -29,7 +29,8 @@
 
             <div class="form-group row">
               <div class="col-xs-6 col-md-6">
-                <b-form-textarea placeholder="Skill"/>
+                <b-form-textarea placeholder="Skill"
+                                 v-model="ninjaFormInput.skill"/>
               </div>
               <tag-manipulator class="col-xs-6 col-md-6" :type="TAG.SKILL"
                                :selected="ninjaFormInput.selectedTags[TAG.SKILL]"
@@ -54,7 +55,7 @@
                            text-field="text"
                            class="my-3"/>
             <b-button @click="validateInputForm" variant="primary">Submit</b-button>
-            <b-button type="reset" variant="danger">Reset</b-button>
+            <b-button @click="resetInputForm" variant="danger">Reset</b-button>
           </b-form>
         </div>
       </b-tab>
@@ -112,6 +113,20 @@ export default {
     },
     validateInputForm() {
       console.log(this.ninjaFormInput)
+    },
+    resetInputForm() {
+      this.ninjaFormInput = {
+        name: '',
+        icon: '',
+        talent: '',
+        skill: '',
+        selectedTags: {
+          'talent': [],
+          'skill': [],
+          'crowd-control': [],
+          'immunity': []
+        }
+      }
     }
   },
   computed: {
