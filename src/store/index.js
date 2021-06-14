@@ -11,13 +11,14 @@ export default new Vuex.Store({
     },
     mutations: {
         removeTag(state, {familyId, docId}) {
-            let familyTag = state.tagList.find(family => family.id === familyId);
+            const familyTag = state.tagList.find(family => family.id === familyId);
             familyTag.options.splice(familyTag.options.findIndex(option => option.id === docId), 1);
         },
         addTag(state, {familyId, ...value}) {
-            let optionsTag = state.tagList.find(tag => tag.id === familyId).options;
-            if (optionsTag.findIndex(option => option.id === value.id) === -1)
-                optionsTag = [...optionsTag, value];
+            const optionsTag = state.tagList.find(tag => tag.id === familyId);
+            if (optionsTag.options.findIndex(option => option.id === value.id) === -1) {
+                optionsTag.options = [...optionsTag.options, value];
+            }
         },
         tagList(state, tempTagList) {
             state.tagList = tempTagList;
