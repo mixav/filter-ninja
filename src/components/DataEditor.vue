@@ -4,17 +4,25 @@
       <b-tab v-for="option in options" :key=option.value :title="option.text">
         <div v-if="(option.value==='add')&&(type==='Ninjas')">
           <b-form>
-            <b v-if="option.value==='add'">Добавление нового персонажа</b>
-            <b-form-input class="mb-2" placeholder="Name"/>
-            <b-form-input class="mb-2" placeholder="Icon"/>
+            <strong v-if="option.value==='add'">Добавление</strong>
+            <div class="form-group row">
+              <div class="col-xs-6 col-md-6">
+                <b-form-input class="mb-2"
+                              placeholder="Name"
+                              v-model="ninjaFormInput.name"/>
+                <b-form-input placeholder="Icon"
+                              v-model="ninjaFormInput.icon"/>
+              </div>
+            </div>
 
             <div class="form-group row">
               <div class="col-xs-6 col-md-6">
-                <b-form-textarea placeholder="Talent"/>
+                <b-form-textarea placeholder="Talent"
+                                 v-model="ninjaFormInput.talent"/>
               </div>
               <tag-manipulator class="col-xs-6 col-md-6" :type="TAG.TALENT"
-                               :selected="selectedTags[TAG.TALENT]"
-                               :available="availableOptions(TAG.TALENT,selectedTags[TAG.TALENT])"
+                               :selected="ninjaFormInput.selectedTags[TAG.TALENT]"
+                               :available="availableOptions(TAG.TALENT,ninjaFormInput.selectedTags[TAG.TALENT])"
                                v-on:addTagToDescription="addTagToDescription"
                                v-on:removeSelectedOption="removeSelectedOption"/>
             </div>
@@ -24,27 +32,28 @@
                 <b-form-textarea placeholder="Skill"/>
               </div>
               <tag-manipulator class="col-xs-6 col-md-6" :type="TAG.SKILL"
-                               :selected="selectedTags[TAG.SKILL]"
-                               :available="availableOptions(TAG.SKILL,selectedTags[TAG.SKILL])"
+                               :selected="ninjaFormInput.selectedTags[TAG.SKILL]"
+                               :available="availableOptions(TAG.SKILL,ninjaFormInput.selectedTags[TAG.SKILL])"
                                v-on:addTagToDescription="addTagToDescription"
-                               v-on:removeSelectedOption="removeSelectedOption"/>
+                               v-on:removeSelectedOption="removeSelectedOption"
+                               v-model="ninjaFormInput.skill"/>
             </div>
             <tag-manipulator :type="TAG.CROWD_CONTROL"
-                             :selected="selectedTags[TAG.CROWD_CONTROL]"
-                             :available="availableOptions(TAG.CROWD_CONTROL,selectedTags[TAG.CROWD_CONTROL])"
+                             :selected="ninjaFormInput.selectedTags[TAG.CROWD_CONTROL]"
+                             :available="availableOptions(TAG.CROWD_CONTROL,ninjaFormInput.selectedTags[TAG.CROWD_CONTROL])"
                              v-on:addTagToDescription="addTagToDescription"
                              v-on:removeSelectedOption="removeSelectedOption"/>
             <tag-manipulator class="mt-2" :type="TAG.IMMUNITY"
-                             :selected="selectedTags[TAG.IMMUNITY]"
-                             :available="availableOptions(TAG.IMMUNITY,selectedTags[TAG.IMMUNITY])"
+                             :selected="ninjaFormInput.selectedTags[TAG.IMMUNITY]"
+                             :available="availableOptions(TAG.IMMUNITY,ninjaFormInput.selectedTags[TAG.IMMUNITY])"
                              v-on:addTagToDescription="addTagToDescription"
                              v-on:removeSelectedOption="removeSelectedOption"/>
             <b-radio-group :options="ninjaType"
-                           v-model="selectedNinjaType"
+                           v-model="ninjaFormInput.currentNinjaType"
                            value-field="value"
                            text-field="text"
                            class="my-3"/>
-            <b-button type="submit" variant="primary">Submit</b-button>
+            <b-button @click="validateInputForm" variant="primary">Submit</b-button>
             <b-button type="reset" variant="danger">Reset</b-button>
           </b-form>
         </div>
@@ -71,18 +80,24 @@ export default {
       ],
       search: '',
       value: [],
-      selectedTags: {
-        'talent': [],
-        'skill': [],
-        'crowd-control': [],
-        'immunity': []
-      },
       ninjaType: [
         {text: 'Авангард', value: 'vanguard'},
         {text: 'Штурмовик', value: 'assaulter'},
         {text: 'Помощник', value: 'support'}
       ],
-      selectedNinjaType: 'vanguard'
+      ninjaFormInput: {
+        name: '',
+        icon: '',
+        talent: '',
+        skill: '',
+        selectedTags: {
+          'talent': [],
+          'skill': [],
+          'crowd-control': [],
+          'immunity': []
+        },
+        currentNinjaType: ''
+      }
     }
   },
   props: {
@@ -90,10 +105,13 @@ export default {
   },
   methods: {
     addTagToDescription: function (type, value) {
-      this.selectedTags[type].push(value);
+      this.ninjaFormInput.selectedTags[type].push(value);
     },
     removeSelectedOption: function (type, value) {
-      this.selectedTags[type] = this.selectedTags[type].filter((tag) => tag !== value)
+      this.ninjaFormInput.selectedTags[type] = this.ninjaFormInput.selectedTags[type].filter((tag) => tag !== value)
+    },
+    validateInputForm() {
+      console.log(this.ninjaFormInput)
     }
   },
   computed: {
