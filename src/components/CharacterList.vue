@@ -15,7 +15,7 @@
       <b-list-group>
         <b-list-group-item v-for="ninja in filterCharacters(charName,selected)" :key="ninja.id">
           <div class="row p-1">
-            <b>{{ ninja.name }}</b>
+            <strong>{{ ninja.name }}</strong>
             <div class="ml-auto">{{ ninja.type }}</div>
           </div>
           <b-row class="p-1">
@@ -29,13 +29,13 @@
               </b-card>
               <b-collapse :id="'talent-'+ninja.id">
                 <b-card>
-                  <b>Талант:</b>
+                  <strong>Талант:</strong>
                   {{ ninja.talent }}
                 </b-card>
               </b-collapse>
               <b-collapse :id="'skill-'+ninja.id">
                 <b-card>
-                  <b>Навык:</b>
+                  <strong>Навык:</strong>
                   {{ ninja.skill }}
                 </b-card>
               </b-collapse>

@@ -1,5 +1,4 @@
 import firebase from "firebase/app";
-// import "firebase/analytics";
 import "firebase/firestore"
 import Vue from 'vue'
 
@@ -17,7 +16,6 @@ firebase.initializeApp(firebaseConfig);
 
 Vue.use(firebase)
 const fb = firebase.firestore()
-// firebase.analytics();
 export {
     fb
 }
