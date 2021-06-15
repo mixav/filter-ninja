@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import CharacterList from '@/components/CharacterList'
-import DataEditor from '@/components/DataEditor'
-import DictionaryEditor from '@/components/DictionaryEditor'
+import CharacterList from '@/components/view/CharacterList'
+import DataEditor from '@/components/editor/DataEditor'
+import DictionaryEditor from '@/components/editor/DictionaryEditor'
 
 Vue.use(VueRouter)
 

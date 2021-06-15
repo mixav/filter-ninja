@@ -34,6 +34,16 @@ export default new Vuex.Store({
         },
         characterList(state, docs) {
             state.characterList = docs.map(doc => ({id: doc.id, ...doc.data()}));
+        },
+        addNewCharacter(state, newCharacter) {
+            const character = state.characterList.find(char => char.id === newCharacter.id);
+            if (!character) {
+                state.characterList = [...state.characterList, newCharacter];
+            }
+        },
+        updateCharacter(state, updatedCharacter) {
+            let charIndex = state.characterList.findIndex(char => char.id === updatedCharacter.id);
+            state.characterList[charIndex] = updatedCharacter;
         }
     },
     actions: {
@@ -87,6 +97,26 @@ export default new Vuex.Store({
                 }).catch((error) => {
                 console.error(error)
             })
+        },
+        addNewCharacter({commit}, newCharacter) {
+            fb.collection('characterList')
+                .add(newCharacter)
+                .then((docRef) => {
+                    commit('addNewCharacter', {id: docRef.id, ...newCharacter})
+                }).catch((error) => {
+                console.error(error)
+            })
+        },
+        updateCharacter({commit}, {id, ...characterData}) {
+            fb.collection('characterList')
+                .doc(id)
+                .update(characterData).then(() => {
+                console.log("Document successfully updated!");
+            }).catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+            commit('updateCharacter', {id, ...characterData})
         }
     },
     modules: {},

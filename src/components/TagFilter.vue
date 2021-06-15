@@ -6,7 +6,7 @@
           stacked
           :name="family.label">
         <b-form-checkbox v-for="tag in family.options"
-                         v-model="selected[family.id]"
+                         v-model="selected[family.label]"
                          :key="tag.id"
                          :value="tag.value">
           {{ tag.value }}
