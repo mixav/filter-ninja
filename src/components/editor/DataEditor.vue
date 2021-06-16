@@ -1,16 +1,14 @@
 <template>
   <b-card no-body>
-    <b-tabs pills vertical>
-      <b-tab v-for="option in options" :key=option.value :title="option.text">
-        <div v-if="(option.value==='add')&&(type==='Ninjas')">
-          <character-editor actionType="option.value"
-                            v-on:saveInputForm="saveInputForm"/>
-        </div>
-        <div v-if="(option.value==='edit')&&(type==='Ninjas')">
-          <select-for-edit v-on:saveInputForm="saveInputForm"
-                           :type="type"
-                           :actionType="option.value"/>
-        </div>
+    <b-tabs pills vertical v-on:activate-tab="onTabChange">
+      <b-tab v-for="option in options"
+             :key=option.value
+             :title="option.text">
+        <b-form-select v-if="option.value!=='add'" v-model="selectedOption"
+                       :options="namedCharacterList"/>
+        <character-editor v-if="option.value!=='remove'" actionType="option.value"
+                          v-on:saveInputForm="saveInputForm"
+                          :selectedForEdit="selectedOption"/>
       </b-tab>
     </b-tabs>
   </b-card>
@@ -18,11 +16,11 @@
 
 <script>
 import CharacterEditor from "@/components/editor/CharacterEditor";
-import SelectForEdit from "@/components/editor/SelectForEdit"
+import {mapState} from "vuex";
 
 export default {
   name: "DataEditor",
-  components: {CharacterEditor, SelectForEdit},
+  components: {CharacterEditor},
   data() {
     return {
       options: [
@@ -33,8 +31,22 @@ export default {
       emitActionByType: {
         'edit': 'updateCharacter',
         'add': 'addNewCharacter'
-      }
+      },
+      selectedOption: {}
     }
+  },
+  computed: {
+    namedCharacterList() {
+      return this.characterList.map((character) => {
+        return {
+          value: character,
+          text: character.name
+        }
+      });
+    },
+    ...mapState([
+      'characterList'
+    ])
   },
   props: {
     type: {
@@ -46,6 +58,9 @@ export default {
   methods: {
     saveInputForm({actionType, ...characterData}) {
       this.$store.dispatch(this.emitActionByType[actionType], characterData.data)
+    },
+    onTabChange() {
+      this.selectedOption = {}
     }
   }
 }

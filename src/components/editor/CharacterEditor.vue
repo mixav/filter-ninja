@@ -135,7 +135,10 @@ export default {
   },
   watch: {
     selectedForEdit: function () {
-      this.ninjaFormInput = this.selectedForEdit
+      if (Object.keys(this.selectedForEdit).length === 0)
+        this.resetInputForm();
+      else
+        this.ninjaFormInput = this.selectedForEdit
     }
   }
 }
