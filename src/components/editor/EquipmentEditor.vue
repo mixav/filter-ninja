@@ -5,9 +5,7 @@
 <script>
 export default {
   name: "EquipmentEditor"
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
